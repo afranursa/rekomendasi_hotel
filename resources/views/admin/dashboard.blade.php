@@ -1,13 +1,8 @@
 @extends('admin.master')
-
 @section('title_bar', 'Dashboard')
-
-@section('title', 'Dashboard')
-    
+@section('title', 'Dashboard')   
 @section('title_breadcrumb', 'Dashboard')
-
 @section('active1', 'active')
-    
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
