@@ -1,7 +1,7 @@
 @extends('admin.master')
-@section('title_bar', 'DataHotel')
-@section('title', 'Data Hotel') 
-@section('title_breadcrumb', 'Data Hotel')
+@section('title_bar', 'DataUser')
+@section('title', 'Data User') 
+@section('title_breadcrumb', 'Data User')
 @section('active3', 'active')
 @section('content')
     <!-- Main content -->
@@ -10,21 +10,9 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <div class="card-body">
-                  <form action="/datahotel/search" method="GET" role="search">
-                    {{ csrf_field() }}
 
+                <div class="card-body">
                   <table id="example2" class="table table-bordered table-hover">
-                    <div class="row">
-                    <div class="col-6">
-                    <input type="search" class="form-control form-control-md" name="cari" placeholder="Ketik nama hotel yang ingin dicari..." >
-                    </div>
-                    <div class="col-6">
-                    <button type="submit" class="btn btn-md btn-default">
-                      <i class="fa fa-search"></i>
-                  </button>
-                </div>
-                  </div><br>  </form>          
                     <a href="/datahotel/tambah"><button type="button"  style="width: 10%" class="btn btn-block btn-success">Tambah</button></a>
                     <br>
                     <thead>
@@ -37,9 +25,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                      @foreach($hotel as $key => $h)
+                      @foreach($hotel as $h)
                     <tr>
-                      <td>{{ ++$key }}</td>
+                      <td>{{ $h->id_hotel }}</td>
                       <td>{{ $h->nama_hotel }}</td>
                       <td>{{ $h->jenis_hotel }}</td>
                       <td>{{ $h->kota }}</td>
@@ -50,6 +38,15 @@
                     </tr>
                     @endforeach
                     </tbody>
+                    <tfoot>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Hotel</th>
+                      <th>Jenis Hotel</th>
+                      <th>Alamat</th>
+                      <th>Aksi</th>
+                    </tr>
+                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->

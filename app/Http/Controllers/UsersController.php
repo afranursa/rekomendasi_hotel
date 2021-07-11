@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Crypt;
 use App\Model\Users;
 use Exception;
 use Illuminate\Support\Facades\Mail;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UsersController extends Controller
 {

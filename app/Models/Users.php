@@ -27,4 +27,8 @@ class Users extends Model
     {
       $this->attributes['password'] = bcrypt($value);
     }
+
+    public function hotel() {
+        return $this->hasMany('App\Models\Rating', 'username');
+    }
 }

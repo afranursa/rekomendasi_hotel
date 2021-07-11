@@ -17,4 +17,8 @@ class Hotel extends Model
         'jenis_hotel',
         'kota',
     ];
+
+    public function hotel() {
+        return $this->hasMany('App\Models\Rating', 'id_hotel');
+    }
 }

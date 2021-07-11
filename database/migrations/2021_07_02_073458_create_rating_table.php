@@ -19,7 +19,11 @@ class CreateRatingTable extends Migration
             $table->foreign('username')->references('username')->on('users');
             $table->string('id_hotel');
             $table->foreign('id_hotel')->references('id_hotel')->on('hotel');
-            $table->string('angka_rating');
+            $table->double('angka_rating');
+            $table->double('fasilitas');
+            $table->double('kenyamanan');
+            $table->double('harga');
+            $table->double('letak');
             $table->timestamps();
         });
     }

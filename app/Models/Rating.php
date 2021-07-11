@@ -18,4 +18,14 @@ class Rating extends Model
         'id_hotel',
         'angka_rating',
     ];
+
+    public function hotel()
+    {
+        return $this->belongsTo('App\Hotel', 'id_hotel');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Hotel', 'useraname');
+    }
 }
