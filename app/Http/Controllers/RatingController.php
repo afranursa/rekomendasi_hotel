@@ -85,6 +85,6 @@ class RatingController extends Controller
             $currentRateUserAfterDiff[$f] = array_map(function ($array1, $array2) { return $array1-$array2; } , $currentRateUser[$f], $averageCurrentUser);
         }
 
-        return \json_encode($ratedOtherUser);
+        return \json_encode($currentRateAfterDiff);
     }
 }
