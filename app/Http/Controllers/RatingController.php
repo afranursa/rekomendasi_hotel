@@ -85,6 +85,47 @@ class RatingController extends Controller
             $currentRateUserAfterDiff[$f] = array_map(function ($array1, $array2) { return $array1-$array2; } , $currentRateUser[$f], $averageCurrentUser);
         }
 
-        return \json_encode($currentRateAfterDiff);
+        $pembilang = [];
+        for($g=0; $g<count($currentRateAfterDiff); $g++){
+            $ll = $currentRateAfterDiff[$g];
+            $lluser = $currentRateUserAfterDiff[$g];
+            $llusers = 0;
+            $items = [];
+
+            for($k=0; $k<count($lluser); $k++) {
+                $llusers = $lluser[$k];
+            }
+
+            for($h=0; $h<count($ll); $h++) {
+                $lll = $ll[$h] * $llusers;
+                $items[$h] = $lll;
+            }
+
+            $pembilang[$g] = $items;
+        }
+
+        $sumPembilang = [];
+        for($l=0; $l<count($pembilang); $l++) {
+            $sumPembilang = array_map(function (...$arrays) {
+                return array_sum($arrays);
+            }, $sumPembilang, $pembilang[$l]);
+        }
+
+        //PENYEBUT
+        $currentRateAfterDiffSQRT = [];
+        $penyebut = [];
+
+        for($m=0; $m<count($currentRateAfterDiff); $m++) {
+            $kk = $currentRateAfterDiff[$m];
+            $items = [];
+            for($n=0; $n<count($kk); $n++) {
+                $kkk = $kk[$n];
+                $items[$n] = $kkk * $kkk;
+            }
+
+            $penyebut[$m] = $items;
+        }
+
+        return \json_encode($sumPembilang);
     }
 }
