@@ -17,32 +17,74 @@ class RatingController extends Controller
         $username = $request->username;
 
         $ratedUser = Rating::where('username', $username)->get();
+        $ratedCurrentUser = [];
         $ratedOtherUser = [];
         $ratedOtherUserCount = [];
+        $i = 0;
 
-        for ($i = 0; i<$ratedUser->count(); $i++){
-            $idHotel = $ratedUser[$i]->id_hotel;
+        foreach ($ratedUser as $rtuser){
+            $idHotel = $rtuser->id_hotel;
+            $username = $rtuser->username;
             $ratedOtherUser[$i] = Rating::where('id_hotel', $idHotel)->get();
+            $ratedCurrentUser[$i] = Rating::where('id_hotel', $idHotel)->where('username', $username)->get();
             $ratedOtherUserCount[$i] = Rating::where('id_hotel', $idHotel)->get()->count();
+            $i++;
         }
 
+        $sum = [];
+        $sumCurrentUser = [];
         $currentRate = [];
-        for ($i = 0; i<count($ratedOtherUser); $i++) {
-            $rate = $ratedOtherUser[$i];
+        $currentRateUser = [];
+
+        for ($a=0; $a<count($ratedOtherUser); $a++) {
+            $rate = $ratedOtherUser[$a];
+            $rateCurrentUser = $ratedCurrentUser[$a];
             $rating = [];
-            for ($j = 0; $j<count($rate); $j++){
-                $rating[$j] = $rate[$j]->angka_rating;
+            $ratingCurrentUser = [];
+            for ($b = 0; $b<count($rate); $b++){
+                $rating[$b] = $rate[$b]->angka_rating;
+                $sum[$b] = 0;
             }
-            $currentRate[$i] = $rating;
+
+            for ($d=0; $d<count($rateCurrentUser); $d++) {
+                $ratingCurrentUser[$d] = $rateCurrentUser[$d]->angka_rating;
+                $sumCurrentUser[$d] = 0;
+            }
+
+            $currentRate[$a] = $rating;
+            $currentRateUser[$a] = $ratingCurrentUser;
         }
 
-        for($i=0; $i<count($currentRate); $i++) {
-            $rt = $currentRate[$i];
-            for($j=0; $j<count($rt); $j++) {
-                $currentRate[i][j];
-            }
+        for ($x=0; $x<count($currentRate); $x++) {
+            $sum = array_map(function (...$arrays) {
+                return array_sum($arrays);
+            }, $sum, $currentRate[$x]);
+
+            $sumCurrentUser = array_map(function (...$arrays) {
+                return array_sum($arrays);
+            }, $sumCurrentUser, $currentRateUser[$x]);
         }
 
-        return \json_encode($currentRate);
+        $average = [];
+        $averageCurrentUser = [];
+        for ($y=0; $y<count($sum); $y++) {
+            $average[$y] = $sum[$y] / count($currentRate);
+        }
+
+        for ($z=0; $z<count($sumCurrentUser); $z++) {
+            $averageCurrentUser[$z] = $sumCurrentUser[$z] / count($currentRateUser);
+        }
+
+        $currentRateAfterDiff = [];
+        $currentRateUserAfterDiff = [];
+        for ($c=0; $c<count($currentRate); $c++){
+            $currentRateAfterDiff[$c] = array_map(function ($array1, $array2) { return $array1-$array2; } , $currentRate[$c], $average);
+        }
+
+        for ($f=0; $f<count($currentRateUser); $f++){
+            $currentRateUserAfterDiff[$f] = array_map(function ($array1, $array2) { return $array1-$array2; } , $currentRateUser[$f], $averageCurrentUser);
+        }
+
+        return \json_encode($ratedOtherUser);
     }
 }

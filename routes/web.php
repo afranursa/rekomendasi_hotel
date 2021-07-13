@@ -45,3 +45,4 @@ Route::get('/datahotel/search',[HotelController::class, 'search']);
 Route::post('/datahotel/update',[HotelController::class, 'update']);
 
 Route::get('/login', [UsersController::class, 'loginIndex']);
+// Route::post('/algoritma/test', [RatingController::class, 'recArroundHotel']);
