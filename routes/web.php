@@ -44,4 +44,6 @@ Route::get('/datahotel/hapus/{id_hotel}',[HotelController::class, 'hapus']);
 Route::get('/datahotel/search',[HotelController::class, 'search']);
 Route::post('/datahotel/update',[HotelController::class, 'update']);
 
+Route::get('/datauser',[UsersController::class, 'index']);
+Route::get('/datauser/search',[UsersController::class, 'search']);
 Route::get('/login', [UsersController::class, 'loginIndex']);

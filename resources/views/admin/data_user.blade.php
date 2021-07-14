@@ -10,43 +10,50 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-
                 <div class="card-body">
+                  <form action="/datauser/search" method="GET" role="search">
+                    {{ csrf_field() }}
+
                   <table id="example2" class="table table-bordered table-hover">
-                    <a href="/datahotel/tambah"><button type="button"  style="width: 10%" class="btn btn-block btn-success">Tambah</button></a>
-                    <br>
+                    <div class="row">
+                    <div class="col-6">
+                    <input type="search" class="form-control form-control-md" name="cari" placeholder="Ketik nama user yang ingin dicari..." >
+                    </div>
+                    <div class="col-6">
+                    <button type="submit" class="btn btn-md btn-default">
+                      <i class="fa fa-search"></i>
+                  </button>
+                </div>
+                  </div><br>  </form>          
+                    {{-- <a href="/datahotel/tambah"><button type="button"  style="width: 10%" class="btn btn-block btn-success">Tambah</button></a> --}}
+                    {{-- <br> --}}
                     <thead>
                     <tr>
                       <th style="width: 5px">No</th>
-                      <th style="width: 250px">Nama Hotel</th>
-                      <th style="width: 150px">Jenis Hotel</th>
+                      <th style="width: 250px">Username</th>
+                      <th style="width: 250px">Nama User</th>
+                      <th style="width: 100px">JK</th>
+                      <th style="width: 250px">No Handphone</th>
                       <th style="width: 400px">Alamat</th>
-                      <th style="width: 100px">Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
-                      @foreach($hotel as $h)
+                      @foreach($users as $key => $h)
                     <tr>
-                      <td>{{ $h->id_hotel }}</td>
-                      <td>{{ $h->nama_hotel }}</td>
-                      <td>{{ $h->jenis_hotel }}</td>
-                      <td>{{ $h->kota }}</td>
-                      <td>
+                      <td>{{ ++$key }}</td>
+                      <td>{{ $h->username }}</td>
+                      {{-- <td>{{ $h->password }}</td> --}}
+                      <td>{{ $h->nama_user }}</td>
+                      <td>{{ $h->jk }}</td>
+                      <td>{{ $h->no_hp }}</td>
+                      <td>{{ $h->alamat }}</td>
+                      {{-- <td>
                         <a href="/datahotel/edit/{{ $h->id_hotel }}"><button type="button" class="btn btn-block btn-success">Edit</button></a>
                         <a href="/datahotel/hapus/{{ $h->id_hotel }}"><button style="margin-top: 5%" type="button"  class="btn btn-block btn-danger">Hapus</button></a>
-                      </td>
+                      </td> --}}
                     </tr>
                     @endforeach
                     </tbody>
-                    <tfoot>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Hotel</th>
-                      <th>Jenis Hotel</th>
-                      <th>Alamat</th>
-                      <th>Aksi</th>
-                    </tr>
-                    </tfoot>
                   </table>
                 </div>
                 <!-- /.card-body -->
