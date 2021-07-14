@@ -47,3 +47,4 @@ Route::post('/datahotel/update',[HotelController::class, 'update']);
 Route::get('/datauser',[UsersController::class, 'index']);
 Route::get('/datauser/search',[UsersController::class, 'search']);
 Route::get('/login', [UsersController::class, 'loginIndex']);
+// Route::post('/algoritma/test', [RatingController::class, 'recArroundHotel']);
