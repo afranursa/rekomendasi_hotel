@@ -59,7 +59,6 @@ class HotelController extends Controller
 		$hotel = DB::table('hotel')->where('id_hotel',$id_hotel)->get();
 		// passing data pegawai yang didapat ke view edit.blade.php
 		return view('admin/edit',['hotel' => $hotel]);
-	
 	}
 
 	public function update(Request $request)
@@ -95,14 +94,14 @@ class HotelController extends Controller
         }
 		// menangkap data pencarian
 		$cari = $request->cari;
- 
+
     		// mengambil data dari table pegawai sesuai pencarian data
 		$hotel = DB::table('hotel')
 		->where('nama_hotel','like',"%".$cari."%")
 		->paginate();
- 
+
     		// mengirim data pegawai ke view index
 		return view('admin/data_hotel',['hotel' => $hotel]);
- 
+
 	}
 }

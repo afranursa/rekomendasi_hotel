@@ -19,7 +19,6 @@ class RatingController extends Controller
         $ratedUser = Rating::where('username', $username)->get();
         $ratedCurrentUser = [];
         $ratedOtherUser = [];
-        $ratedOtherUserCount = [];
         $i = 0;
 
         foreach ($ratedUser as $rtuser){
@@ -27,7 +26,6 @@ class RatingController extends Controller
             $username = $rtuser->username;
             $ratedOtherUser[$i] = Rating::where('id_hotel', $idHotel)->get();
             $ratedCurrentUser[$i] = Rating::where('id_hotel', $idHotel)->where('username', $username)->get();
-            $ratedOtherUserCount[$i] = Rating::where('id_hotel', $idHotel)->get()->count();
             $i++;
         }
 
@@ -85,6 +83,7 @@ class RatingController extends Controller
             $currentRateUserAfterDiff[$f] = array_map(function ($array1, $array2) { return $array1-$array2; } , $currentRateUser[$f], $averageCurrentUser);
         }
 
+        //PEMBILANG
         $pembilang = [];
         for($g=0; $g<count($currentRateAfterDiff); $g++){
             $ll = $currentRateAfterDiff[$g];
@@ -111,9 +110,11 @@ class RatingController extends Controller
             }, $sumPembilang, $pembilang[$l]);
         }
 
+        $pembilangAkhir = $sumPembilang;
+
         //PENYEBUT
-        $currentRateAfterDiffSQRT = [];
         $penyebut = [];
+        $penyebutUser = [];
 
         for($m=0; $m<count($currentRateAfterDiff); $m++) {
             $kk = $currentRateAfterDiff[$m];
@@ -126,6 +127,95 @@ class RatingController extends Controller
             $penyebut[$m] = $items;
         }
 
-        return \json_encode($sumPembilang);
+        for($m=0; $m<count($currentRateUserAfterDiff); $m++) {
+            $kk = $currentRateUserAfterDiff[$m];
+            $items = [];
+            for($n=0; $n<count($kk); $n++) {
+                $kkk = $kk[$n];
+                $items[$n] = $kkk * $kkk;
+            }
+
+            $penyebutUser[$m] = $items;
+        }
+
+        $sumPenyebut = [];
+        for($o=0; $o<count($penyebut); $o++) {
+            $sumPenyebut = array_map(function (...$arrays) {
+                return array_sum($arrays);
+            }, $sumPenyebut, $penyebut[$o]);
+        }
+
+        $sumPenyebutUser = [];
+        for($o=0; $o<count($penyebutUser); $o++) {
+            $sumPenyebutUser = array_map(function (...$arrays) {
+                return array_sum($arrays);
+            }, $sumPenyebutUser, $penyebutUser[$o]);
+        }
+
+        $sumPenyebutSQRT = [];
+        for($p=0; $p<count($sumPenyebut); $p++) {
+            $sumPenyebutSQRT[$p] = sqrt($sumPenyebut[$p]);
+        }
+
+        $sumPenyebutUserSQRT = [];
+        for($p=0; $p<count($sumPenyebutUser); $p++) {
+            $sumPenyebutUserSQRT[$p] = sqrt($sumPenyebutUser[$p]);
+        }
+
+        $penyebutAkhir = [];
+        for($q=0; $q<count($sumPenyebutSQRT); $q++) {
+            $mm = $sumPenyebutSQRT[$q];
+            $nn = $sumPenyebutUserSQRT[0];
+            $penyebutAkhir[$q] = $mm * $nn;
+        }
+
+        //HASIL
+        $lengthPembilang = count($pembilangAkhir);
+        $lengthPenyebut = count($penyebutAkhir);
+        $result = [];
+
+        if($lengthPembilang == $lengthPenyebut){
+            for($r=0; $r<$lengthPembilang; $r++){
+                $result[$r] = $pembilangAkhir[$r] / $penyebutAkhir[$r];
+            }
+        }
+
+        $maxValue = max($result);
+        $maxIndex = array_keys($result, max($result));
+
+        $result_diff = [];
+        $u = 0;
+        for($t=0; $t<count($result); $t++) {
+            if($t != $maxIndex[0]){
+                $result_diff[$u] = $result[$t];
+                $u++;
+            }
+        }
+
+        $maxIndexResult = array_keys($result_diff, max($result_diff));
+
+        $suggestHotel = [];
+        for($s=0; $s<count($ratedOtherUser); $s++) {
+            $rr = $ratedOtherUser[$s];
+            $res = $rr[$maxIndexResult[0]];
+            $suggestHotel[$s] = $res;
+        }
+
+        $usernameSimilar = $suggestHotel[0]->username;
+
+        // $hotelSimilar = Rating::where('username', $usernameSimilar)->get();
+
+        // $hotels = [];
+        // for($v=0; $v<count($ratedUser); $v++) {
+        //     $hotel = [];
+        //     for($w=0; $w<count($hotelSimilar); $w++) {
+        //         if($hotelSimilar[$w]->id_hotel != $ratedUser[$v]->id_hotel){
+        //             $hotel[$w] = $hotelSimilar[$w]->id_hotel;
+        //         }
+        //     }
+        //     $hotels[$v] = $hotel;
+        // }
+
+        return response()->json($usernameSimilar, 200);
     }
 }
