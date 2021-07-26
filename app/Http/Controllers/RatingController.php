@@ -216,6 +216,22 @@ class RatingController extends Controller
         //     $hotels[$v] = $hotel;
         // }
 
-        return response()->json($usernameSimilar, 200);
+        $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
+        $ratUser = Rating::where('username', $username)->get();
+
+        $hotelSimilar = [];
+        $hotelUser = [];
+        
+        foreach($ratUser as $key1 => $rtu) {
+            $hotelUser[$key1] = $rtu->id_hotel;
+        }
+
+        foreach($ratSimiliar as $key2 => $rts) {
+            $hotelSimilar[$key2] = $rts->id_hotel;
+        }
+
+        $hotel = array_diff($hotelSimilar, $hotelUser);
+
+        return response()->json($hotel, 200);
     }
 }

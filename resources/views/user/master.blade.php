@@ -13,7 +13,7 @@
     
 	  <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container-fluid px-md-5">
-	      <a class="navbar-brand" href="index.html">Judge <span>A Law Firm</span></a>
+	      <a class="navbar-brand" href="index.html">SR <span>Hotel</span></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -33,7 +33,7 @@
 	  </nav>
     <!-- END nav -->
     
-    <div class="hero-wrap js-fullheight" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="hero-wrap js-fullheight" style="/usertemplate/images/bg_1.jpg" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container-fluid px-md-5">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-start" data-scrollax-parent="true">
@@ -195,7 +195,7 @@
     	</div>
     </section>
 
-    <section class="ftco-section ftco-no-pt">
+    {{-- <section class="ftco-section ftco-no-pt">
     	<div class="container">
     		<div class="row justify-content-center mb-5 pb-3">
           <div class="col-md-7 text-center heading-section ftco-animate">
@@ -302,7 +302,7 @@
         	</div>
         </div>
     	</div>
-    </section>
+    </section> --}}
 		
 
 		<section class="ftco-consultation ftco-section img" style="background-image: url(images/bg_2.jpg);">
