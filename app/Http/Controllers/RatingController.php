@@ -257,6 +257,6 @@ class RatingController extends Controller
             }
         }
 
-        return $hotelInCity;
+        return response()->json($hotelInCity, 200);
     }
 }
