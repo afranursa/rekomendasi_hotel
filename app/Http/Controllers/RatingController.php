@@ -219,19 +219,44 @@ class RatingController extends Controller
         $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
         $ratUser = Rating::where('username', $username)->get();
 
+        $unsortedData = collect($ratSimiliar);
+        $ar = $unsortedData->sortBy('angka_rating');
+        $ar = $ar->values()->toArray();
+
+        $unsortedData2 = collect($ratUser);
+        $ar2 = $unsortedData2->sortBy('angka_rating');
+        $ar2 = $ar2->values()->toArray();
+
+        $ratSimiliar = $ar;
+        $ratUser = $ar2;
+
         $hotelSimilar = [];
         $hotelUser = [];
-        
+
         foreach($ratUser as $key1 => $rtu) {
-            $hotelUser[$key1] = $rtu->id_hotel;
+            $hotelUser[$key1] = $rtu['id_hotel'];
         }
 
         foreach($ratSimiliar as $key2 => $rts) {
-            $hotelSimilar[$key2] = $rts->id_hotel;
+            $hotelSimilar[$key2] = $rts['id_hotel'];
         }
 
-        $hotel = array_diff($hotelSimilar, $hotelUser);
+        $hotel = array_values(array_diff($hotelSimilar, $hotelUser));
+        $hotelDetails =[];
 
-        return response()->json($hotel, 200);
+        for($zz=0; $zz<count($hotel); $zz++){
+            $hotelDetails[$zz] = Hotel::where('id_hotel', $hotel[$zz])->first();
+        }
+
+        $hotelInCity = [];
+        $cc = 0;
+        foreach($hotelDetails as $key => $detail) {
+            if($detail->kota == $city) {
+                $hotelInCity[$cc] = $detail;
+                $cc++;
+            }
+        }
+
+        return $hotelInCity;
     }
 }
