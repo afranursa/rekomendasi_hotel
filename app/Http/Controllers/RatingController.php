@@ -219,6 +219,28 @@ class RatingController extends Controller
         $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
         $ratUser = Rating::where('username', $username)->get();
 
+        // $temp = 0;
+        // $xw = 0;
+        // $ratSimilarSort = [];
+        // for($xz=0; $xz<count($ratSimiliar); $xz++) {
+        //     if($ratSimiliar[$xz]->angka_rating < $temp){
+        //         $ratSimilarSort[$xw] = $ratSimiliar[$xz];
+        //         $xw++;
+        //     }else{
+        //         continue;
+        //     }
+
+        //     if(($xz+1)<=count($ratSimiliar)){
+        //         $temp = $ratSimiliar[$xz+1]->angka_rating;
+        //     }else {
+        //         $temp = $ratSimiliar[$xz]->angka_rating;
+        //     }
+        // }
+
+        // $ratUser = usort($ratUser, function($first, $second){
+        //     return $first->angka_rating > $second->angka_rating;
+        // });
+
         $hotelSimilar = [];
         $hotelUser = [];
         
@@ -232,6 +254,24 @@ class RatingController extends Controller
 
         $hotel = array_diff($hotelSimilar, $hotelUser);
 
-        return response()->json($hotel, 200);
+        return response()->json($ratSimilarSort, 200);
+    }
+
+    function sortArrayByKey(&$array,$key,$string = false,$asc = true){
+        if($string){
+            usort($array,function ($a, $b) use(&$key,&$asc)
+            {
+                if($asc)    return strcmp(strtolower($a{$key}), strtolower($b{$key}));
+                else        return strcmp(strtolower($b{$key}), strtolower($a{$key}));
+            });
+        }else{
+            usort($array,function ($a, $b) use(&$key,&$asc)
+            {
+                if($a[$key] == $b{$key}){return 0;}
+                if($asc) return ($a{$key} < $b{$key}) ? -1 : 1;
+                else     return ($a{$key} > $b{$key}) ? -1 : 1;
+    
+            });
+        }
     }
 }

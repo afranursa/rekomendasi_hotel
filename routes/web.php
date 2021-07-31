@@ -33,7 +33,7 @@ Route::get('/datahotel', function () {
     return view('admin.data_hotel');
 });
 Route::get('/user', function () {
-    return view('user.master');
+    return view('user.home');
 });
 //Admin Data Hotel
 Route::get('/datahotel',[HotelController::class, 'index']);
@@ -48,3 +48,7 @@ Route::get('/datauser',[UsersController::class, 'index']);
 Route::get('/datauser/search',[UsersController::class, 'search']);
 Route::get('/login', [UsersController::class, 'loginIndex']);
 // Route::post('/algoritma/test', [RatingController::class, 'recArroundHotel']);
+
+Route::get('/user/rating', function () {
+    return view('user.rating');
+});
