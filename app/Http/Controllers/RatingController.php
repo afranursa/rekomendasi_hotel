@@ -219,40 +219,54 @@ class RatingController extends Controller
         $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
         $ratUser = Rating::where('username', $username)->get();
 
-        // $temp = 0;
-        // $xw = 0;
-        // $ratSimilarSort = [];
-        // for($xz=0; $xz<count($ratSimiliar); $xz++) {
-        //     if($ratSimiliar[$xz]->angka_rating < $temp){
-        //         $ratSimilarSort[$xw] = $ratSimiliar[$xz];
-        //         $xw++;
-        //     }else{
-        //         continue;
-        //     }
+        $temp = 0;
+        $xw = 0;
+        $ratSimilarSort = [];
+         for($xz=0; $xz<count($ratSimiliar); $xz++) {
+             if($ratSimiliar[$xz]->angka_rating < $temp){
+                 $ratSimilarSort[$xw] = $ratSimiliar[$xz];
+                 $xw++;
+             }else{
+                 continue;
+             }
 
-        //     if(($xz+1)<=count($ratSimiliar)){
-        //         $temp = $ratSimiliar[$xz+1]->angka_rating;
-        //     }else {
-        //         $temp = $ratSimiliar[$xz]->angka_rating;
-        //     }
-        // }
+             if(($xz+1)<=count($ratSimiliar)){
+                 $temp = $ratSimiliar[$xz+1]->angka_rating;
+             }else {
+                 $temp = $ratSimiliar[$xz]->angka_rating;
+             }
+         }
 
-        // $ratUser = usort($ratUser, function($first, $second){
-        //     return $first->angka_rating > $second->angka_rating;
-        // });
+         $ratUser = usort($ratUser, function($first, $second){
+             return $first->angka_rating > $second->angka_rating;
+         });
 
         $hotelSimilar = [];
         $hotelUser = [];
-        
+
         foreach($ratUser as $key1 => $rtu) {
-            $hotelUser[$key1] = $rtu->id_hotel;
+            $hotelUser[$key1] = $rtu['id_hotel'];
         }
 
         foreach($ratSimiliar as $key2 => $rts) {
-            $hotelSimilar[$key2] = $rts->id_hotel;
+            $hotelSimilar[$key2] = $rts['id_hotel'];
         }
 
-        $hotel = array_diff($hotelSimilar, $hotelUser);
+        $hotel = array_values(array_diff($hotelSimilar, $hotelUser));
+        $hotelDetails =[];
+
+        for($zz=0; $zz<count($hotel); $zz++){
+            $hotelDetails[$zz] = Hotel::where('id_hotel', $hotel[$zz])->first();
+        }
+
+        $hotelInCity = [];
+        $cc = 0;
+        foreach($hotelDetails as $key => $detail) {
+            if($detail->kota == $city) {
+                $hotelInCity[$cc] = $detail;
+                $cc++;
+            }
+        }
 
         return response()->json($ratSimilarSort, 200);
     }
