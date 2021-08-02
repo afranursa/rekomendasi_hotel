@@ -268,7 +268,7 @@ class RatingController extends Controller
             }
         }
 
-        return response()->json($ratSimilarSort, 200);
+        return response()->json($hotelInCity, 200);
     }
 
     function sortArrayByKey(&$array,$key,$string = false,$asc = true){
