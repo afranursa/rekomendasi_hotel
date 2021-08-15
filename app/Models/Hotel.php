@@ -15,7 +15,11 @@ class Hotel extends Model
     protected $fillable = [
         'nama_hotel',
         'jenis_hotel',
+        'alamat',
         'kota',
+        'gambar_hotel',
+        'deskripsi',
+        'kontak'
     ];
 
     public function hotel() {

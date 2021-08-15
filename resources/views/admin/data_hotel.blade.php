@@ -30,9 +30,12 @@
                     <thead>
                     <tr>
                       <th style="width: 5px">No</th>
-                      <th style="width: 250px">Nama Hotel</th>
-                      <th style="width: 150px">Jenis Hotel</th>
-                      <th style="width: 400px">Alamat</th>
+                      <th>Gambar</th>
+                      <th style="width: 200px">Nama Hotel</th>
+                      <th style="width: 100px">Jenis Hotel</th>
+                      <th style="width: 200px">Alamat</th>
+                      <th style="width: 500px">Deskripsi</th>
+                      <th style="width: 100px">Kontak</th>
                       <th style="width: 100px">Aksi</th>
                     </tr>
                     </thead>
@@ -40,9 +43,12 @@
                       @foreach($hotel as $key => $h)
                     <tr>
                       <td>{{ ++$key }}</td>
+                      <td><img width="100px" src="{{Storage::url($h->gambar_hotel)}}"></td>
                       <td>{{ $h->nama_hotel }}</td>
                       <td>{{ $h->jenis_hotel }}</td>
-                      <td>{{ $h->kota }}</td>
+                      <td>{{ $h->alamat }}</td>
+                      <td>{{ $h->deskripsi }}</td>
+                      <td>{{ $h->kontak }}</td>
                       <td>
                         <a href="/datahotel/edit/{{ $h->id_hotel }}"><button type="button" class="btn btn-block btn-success">Edit</button></a>
                         <a href="/datahotel/hapus/{{ $h->id_hotel }}"><button style="margin-top: 5%" type="button"  class="btn btn-block btn-danger">Hapus</button></a>

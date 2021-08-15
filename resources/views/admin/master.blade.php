@@ -22,12 +22,7 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
+      
     </ul>
 
     <!-- Right navbar links -->
@@ -62,7 +57,7 @@
       </div>
 
       <!-- SidebarSearch Form -->
-      <div class="form-inline">
+      {{-- <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
           <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
           <div class="input-group-append">
@@ -71,7 +66,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> --}}
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -79,7 +74,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="/" class="nav-link @yield('active1')">
+            <a href="/admin/dashboard" class="nav-link @yield('active1')">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -109,37 +104,22 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="/datarating" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Rating</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-header">EXAMPLES</li>
-          <li class="nav-item">
-            <a href="#" class="nav-link @yield('active4')">
-              <i class="nav-icon fas fa-search"></i>
+          <li class="nav-item menu-open">
+            <a href="/admin/logout" class="nav-link">
+            <i class="nav-icon fas fa-logout"></i>
               <p>
-                Search
-                <i class="fas fa-angle-left right"></i>
+                Logout
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/search/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Search</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/search/enhanced.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Enhanced</p>
-                </a>
-              </li>
-            </ul>
           </li>
+          
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -170,6 +150,25 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        @if ($errors->any())
+					<div class="alert alert-danger" role="alert">
+						<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{$error}}</li>
+							@endforeach
+						</ul>
+					</div>
+				@endif
+				@if(Session::has('alert-danger'))
+					<div class="alert alert-danger">
+						<div>{{Session::get('alert-danger')}}</div>
+					</div>
+				@endif
+				@if(Session::has('alert-success'))
+					<div class="alert alert-success">
+						<div>{{Session::get('alert-success')}}</div>
+					</div>
+        @endif
         @yield('content')
       </div><!-- /.container-fluid -->
     </section>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Hotel;
 
 class HotelController extends Controller
 {
@@ -15,7 +17,7 @@ class HotelController extends Controller
         }
     	$hotel = DB::table('hotel')->get();
 
-    	// mengirim data pegawai ke view index
+    	// mengirim data hotel ke view index
     	return view('admin/data_hotel',['hotel' => $hotel]);
 
     }
@@ -25,8 +27,8 @@ class HotelController extends Controller
 		if(!Session::get('loginAdmin')){
             return redirect('/admin/login');
         }
-    	$hotel = DB::table('hotel')->get();
-
+		//jenis hotel
+		$hotel = Hotel::get();
     	// mengirim data pegawai ke view index
     	return view('admin/tambah');
 
@@ -37,6 +39,12 @@ class HotelController extends Controller
 		if(!Session::get('loginAdmin')){
             return redirect('/admin/login');
         }
+		// validasi upload gambar
+		$this->validate($request, [
+			'gambar_hotel' => 'required|file|max:7000'
+		]);
+		$path = Storage::putfile('public/images', $request->file('gambar_hotel'));
+
 		// insert data ke table pegawai
 		$lastid = DB::table('hotel')->latest('id_hotel')->get();
 		$idstring = intval($lastid[0]->id_hotel);
@@ -44,10 +52,14 @@ class HotelController extends Controller
 			'id_hotel' => $idstring+1,
 			'nama_hotel' => $request->nama_hotel,
 			'jenis_hotel' => $request->jenis_hotel,
-			'kota' => $request->kota
+			'alamat' => $request->alamat,
+			'kota' => $request->kota,
+			'gambar_hotel' => $path,
+			'deskripsi' => $request->deskripsi,
+			'kontak' => $request->kontak
 		]);
 		// alihkan halaman ke halaman pegawai
-		return redirect('/datahotel');
+		return redirect('/datahotel')->with('alert-success', 'Hotel berhasil ditambahkan!');
 	}
 
 	public function edit($id_hotel)
@@ -66,14 +78,30 @@ class HotelController extends Controller
 		if(!Session::get('loginAdmin')){
             return redirect('/admin/login');
         }
-		// update data pegawai
+
+		$path = '';
+
+		if($request->gambar_hotel){
+			$this->validate($request, [
+				'gambar_hotel' => 'required|file|max:7000'
+			]);
+			$path = Storage::putfile('public/images', $request->file('gambar_hotel'));
+		}else {
+			$hotel = Hotel::find($request->id_hotel);
+			$path = $hotel->gambar_hotel;
+		}
+		// update data hotel
 		DB::table('hotel')->where('id_hotel',$request->id_hotel)->update([
 			'nama_hotel' => $request->nama_hotel,
 			'jenis_hotel' => $request->jenis_hotel,
-			'kota' => $request->kota
+			'alamat' => $request->alamat,
+			'kota' => $request->kota,
+			'gambar_hotel' => $path,
+			'deskripsi' => $request->deskripsi,
+			'kontak' => $request->kontak
 		]);
-		// alihkan halaman ke halaman pegawai
-		return redirect('/datahotel');
+		// alihkan halaman ke halaman data hotel
+		return redirect('/datahotel')->with('alert-success', 'Hotel berhasil diubah!');;
 	}
 
 	public function hapus($id_hotel)
@@ -84,7 +112,7 @@ class HotelController extends Controller
 		// update data pegawai
 		DB::table('hotel')->where('id_hotel',$id_hotel)->delete();
 		// alihkan halaman ke halaman pegawai
-		return redirect('/datahotel');
+		return redirect('/datahotel')->with('alert-success', 'Hotel berhasil dihapus!');;
 	}
 
 	public function search(Request $request)
@@ -102,6 +130,5 @@ class HotelController extends Controller
 
     		// mengirim data pegawai ke view index
 		return view('admin/data_hotel',['hotel' => $hotel]);
-
 	}
 }

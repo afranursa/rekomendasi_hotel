@@ -5,13 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
 
-	@include('user.style')
+  	@include('user.style')
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   </head>
 
-  
   <body>
     
-	  <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container-fluid px-md-5">
 	      <a class="navbar-brand" href="index.html">SR <span>Hotel</span></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,11 +21,12 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="/user" class="nav-link">Home</a></li>
+            
+	          <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a href="/user/rating" class="nav-link">Rating</a></li>
-	          <li class="nav-item"><a href="practice-areas.html" class="nav-link">Detail Hotel</a></li>
-	          <li class="nav-item"><a href="case.html" class="nav-link">History</a></li>
-	          <li class="nav-item"><a href="attorneys.html" class="nav-link">Login</a></li>
+	          <li class="nav-item"><a href="/user/detail_hotel" class="nav-link">Detail Hotel</a></li>
+	          <li class="nav-item"><a href="/user/riwayat" class="nav-link">Riwayat Pengguna</a></li>
+	          <li class="nav-item"><a href="/user/logout" class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>

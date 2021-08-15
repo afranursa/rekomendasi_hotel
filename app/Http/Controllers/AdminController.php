@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Admin;
+use App\Models\Hotel;
+use App\Models\Users;
+use App\Models\Rating;
 use Exception;
 
 class AdminController extends Controller {
@@ -57,14 +60,21 @@ class AdminController extends Controller {
 
         Session::forget('loginAdmin');
         Session::forget('username');
-        Session::forget('nama_admin');
+        Session::forget('namaAdmin');
+
+        return redirect('/admin/login')->with('alert-success', 'Logout berhasil');
     }
 
     public function dashboard(){
         if(!Session::get('loginAdmin')){
             return redirect('/admin/login');
         }
+        
+        $datahotel = Hotel::count();
+        $datauser = Users::count();
+        $datarating = Rating::count();
 
-        return view('admin.dashboard');
+        return view('admin.dashboard', compact('datahotel', 'datauser', 'datarating'));
     }
+
 }

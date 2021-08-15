@@ -7,16 +7,56 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Hotel;
 use App\Models\Rating;
 
-class RatingController extends Controller
-{
-    public function recArroundHotel(Request $request) {
-        $city = $request->city;
-        $username = $request->username;
+class RatingController extends Controller{
+//menampilkan semua data yg sudah dirating 
+    public function ownRatedHotel(Request $request) {
+        $city = $request->city; //mengambil data kota, kenapa inisialisasinya city bukan kota?
+        $username = $request->username; //mengambil data username
 
+        $ratedHotel = Rating::where('username', $username)->get(); //produce: SELECT*FROM table
+
+        $unsortedData = collect($ratedHotel);
+        $ar = $unsortedData->sortBy('angka_rating'); //angka_rating mengambil dari database
+        $ar = $ar->values()->toArray(); //menampilkan semua data yg sudah dirating
+
+        $ratedHotel = $ar; //rata-rata hotel yang sudah dirating
+        $hotel = []; //inisialisasi hotel
+        $a = 0; //inisialisasi user pembanding utama
+
+        foreach($ratedHotel as $rat){ //menampilkan data hotel dengan memanggil id hotel
+            $hotel[$a] = Hotel::where('id_hotel', $rat['id_hotel'])->first();
+            $a++; 
+        }
+
+        $hotelInCity = []; //rata-rata hotel terhadap user pembanding umum berdasarkan kota
+        $b = 0;
+        foreach($hotel as $key => $htl) {
+            if($htl->kota == $city) {
+                $hotelInCity[$b] = $htl;
+                $b++;
+            }
+        }
+
+        return response()->json($hotelInCity, 200);
+    }
+
+    public function recArroundHotel(Request $request) {
+        $city = 'Cirebon';
+        $username = $request->username;
         $ratedUser = Rating::where('username', $username)->get();
+
+        if($ratedUser->count() < 2) {
+            return response()->json([
+                "count" => $ratedUser->count(),
+                "username" => $username,
+                "message"=>"User must submit at least 2 rate"
+            ], 400);
+        }
+
         $ratedCurrentUser = [];
         $ratedOtherUser = [];
         $i = 0;
@@ -62,7 +102,7 @@ class RatingController extends Controller
                 return array_sum($arrays);
             }, $sumCurrentUser, $currentRateUser[$x]);
         }
-
+        //mencari rata-rata
         $average = [];
         $averageCurrentUser = [];
         for ($y=0; $y<count($sum); $y++) {
@@ -73,6 +113,7 @@ class RatingController extends Controller
             $averageCurrentUser[$z] = $sumCurrentUser[$z] / count($currentRateUser);
         }
 
+        //menampilkan hasil penyebut
         $currentRateAfterDiff = [];
         $currentRateUserAfterDiff = [];
         for ($c=0; $c<count($currentRate); $c++){
@@ -219,27 +260,16 @@ class RatingController extends Controller
         $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
         $ratUser = Rating::where('username', $username)->get();
 
-        $temp = 0;
-        $xw = 0;
-        $ratSimilarSort = [];
-         for($xz=0; $xz<count($ratSimiliar); $xz++) {
-             if($ratSimiliar[$xz]->angka_rating < $temp){
-                 $ratSimilarSort[$xw] = $ratSimiliar[$xz];
-                 $xw++;
-             }else{
-                 continue;
-             }
+        $unsortedData = collect($ratSimiliar);
+        $ar = $unsortedData->sortBy('angka_rating');
+        $ar = $ar->values()->toArray();
 
-             if(($xz+1)<=count($ratSimiliar)){
-                 $temp = $ratSimiliar[$xz+1]->angka_rating;
-             }else {
-                 $temp = $ratSimiliar[$xz]->angka_rating;
-             }
-         }
+        $unsortedData2 = collect($ratUser);
+        $ar2 = $unsortedData2->sortBy('angka_rating');
+        $ar2 = $ar2->values()->toArray();
 
-         $ratUser = usort($ratUser, function($first, $second){
-             return $first->angka_rating > $second->angka_rating;
-         });
+        $ratSimiliar = $ar;
+        $ratUser = $ar2;
 
         $hotelSimilar = [];
         $hotelUser = [];
@@ -271,21 +301,22 @@ class RatingController extends Controller
         return response()->json($hotelInCity, 200);
     }
 
-    function sortArrayByKey(&$array,$key,$string = false,$asc = true){
-        if($string){
-            usort($array,function ($a, $b) use(&$key,&$asc)
-            {
-                if($asc)    return strcmp(strtolower($a{$key}), strtolower($b{$key}));
-                else        return strcmp(strtolower($b{$key}), strtolower($a{$key}));
-            });
-        }else{
-            usort($array,function ($a, $b) use(&$key,&$asc)
-            {
-                if($a[$key] == $b{$key}){return 0;}
-                if($asc) return ($a{$key} < $b{$key}) ? -1 : 1;
-                else     return ($a{$key} > $b{$key}) ? -1 : 1;
-    
-            });
+    public function showOther(Request $request){
+        $idHotel = $request->id_hotel;
+        $gambarHotel = $request->gambar_hotel;
+        $rating = Rating::where('id_hotel', $idHotel)->get();
+        $ratSum = 0;
+
+        foreach($rating as $rat){
+            $ratSum = $ratSum + $rat->angka_rating;
         }
+
+        $ratAverage = $ratSum/$rating->count();
+        $gambarHotel = Storage::url($gambarHotel);
+
+        return response()->json([
+            "rating" => $ratAverage,
+            "gambar" => $gambarHotel
+        ], 200);
     }
 }

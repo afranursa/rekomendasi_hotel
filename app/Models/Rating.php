@@ -17,6 +17,10 @@ class Rating extends Model
         'username',
         'id_hotel',
         'angka_rating',
+        'fasilitas',
+        'kenyamanan',
+        'harga',
+        'letak'
     ];
 
     public function hotel()
@@ -26,6 +30,6 @@ class Rating extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Hotel', 'useraname');
+        return $this->belongsTo('App\Hotel', 'username');
     }
 }
