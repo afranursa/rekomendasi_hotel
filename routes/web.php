@@ -59,6 +59,7 @@ Route::get('/user/home', [UsersController::class, 'home']);
 Route::get('/user/registrasi', [UsersController::class, 'regisIndex']);
 Route::post('/user/simpanregistrasi', [UsersController::class, 'regisSave']);
 
+
 Route::get('/user/rating', function () {
     return view('user.rating');
 });

@@ -140,12 +140,12 @@
 											let html = `
 											<div class="col-md-4 d-flex">
 												<div class="blog-entry">
-												<a href="blog-single.html" class="block-20" style="background-image: url(${res.gambar})">
+												<img class="block-20" width="100px" height="50px" src="${res.gambar}">
 												</a>
 												<div class="text p-4 float-right d-block">
 													<div class="topper d-flex align-items-center">
 														<div class="one py-2 pl-3 pr-1 align-self-stretch">
-															<span class="day">${res.rating}</span>
+															<span style="color: white">${res.rating}</span>
 														</div>
 														<div class="two pl-0 pr-3 py-2 align-self-stretch">
 															<img src="">
