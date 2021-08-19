@@ -12,7 +12,7 @@ use App\Models\Hotel;
 use App\Models\Rating;
 
 class RatingController extends Controller{
-//menampilkan semua data yg sudah dirating 
+//menampilkan semua data yg sudah dirating
     public function ownRatedHotel(Request $request) {
         $city = $request->city; //mengambil data kota, kenapa inisialisasinya city bukan kota?
         $username = $request->username; //mengambil data username
@@ -29,7 +29,7 @@ class RatingController extends Controller{
 
         foreach($ratedHotel as $rat){ //menampilkan data hotel dengan memanggil id hotel
             $hotel[$a] = Hotel::where('id_hotel', $rat['id_hotel'])->first();
-            $a++; 
+            $a++;
         }
 
         $hotelInCity = []; //rata-rata hotel terhadap user pembanding umum berdasarkan kota
