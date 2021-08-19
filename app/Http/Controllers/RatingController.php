@@ -45,7 +45,7 @@ class RatingController extends Controller{
     }
 
     public function recArroundHotel(Request $request) {
-        $city = 'Cirebon';
+        $city = $request->city;
         $username = $request->username;
         $ratedUser = Rating::where('username', $username)->get();
 
@@ -242,6 +242,7 @@ class RatingController extends Controller{
             $suggestHotel[$s] = $res;
         }
 
+        //Mencari Similaritas User
         $usernameSimilar = $suggestHotel[0]->username;
 
         // $hotelSimilar = Rating::where('username', $usernameSimilar)->get();
@@ -260,12 +261,13 @@ class RatingController extends Controller{
         $ratSimiliar = Rating::where('username', $usernameSimilar)->get();
         $ratUser = Rating::where('username', $username)->get();
 
+        //Sorting berdasarkan rating tertinggi
         $unsortedData = collect($ratSimiliar);
-        $ar = $unsortedData->sortBy('angka_rating');
+        $ar = $unsortedData->sortByDesc('angka_rating');
         $ar = $ar->values()->toArray();
 
         $unsortedData2 = collect($ratUser);
-        $ar2 = $unsortedData2->sortBy('angka_rating');
+        $ar2 = $unsortedData2->sortByDesc('angka_rating');
         $ar2 = $ar2->values()->toArray();
 
         $ratSimiliar = $ar;
@@ -296,6 +298,21 @@ class RatingController extends Controller{
                 $hotelInCity[$cc] = $detail;
                 $cc++;
             }
+        }
+
+        if(count($hotelInCity) < 1) {
+            $hotelRatOwn = Rating::where('username', $username)->get();
+            $hotelRatOwn = collect($hotelRatOwn);
+            $hotelRatOwn = $hotelRatOwn->sortBy('angka_rating');
+            $hotelRatOwn = $hotelRatOwn->values()->toArray();
+
+            $hotelList = [];
+            
+            foreach($hotelRatOwn as $key => $htrt) {
+                $hotelList[$key] = Hotel::where('id_hotel', $htrt['id_hotel'])->first();
+            }
+
+            $hotelInCity = $hotelList;
         }
 
         return response()->json($hotelInCity, 200);
