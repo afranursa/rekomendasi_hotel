@@ -1,4 +1,5 @@
 @extends('user.master')
+@section('active3', 'active')
 @section('content')
 
 <section class="hero-wrap hero-wrap-2" style="background-image: url('/usertemplate/images/dark.jpg');" data-stellar-background-ratio="0.5">
@@ -13,39 +14,75 @@
   </div>
 </section>
 
-<div class="card-deck mt-5 ml-3 mr-3">
-  <div class="card">
-    <img class="card-img-top" src="https://pbs.twimg.com/profile_images/461652698236850176/cucY7-cL.jpeg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+<input id="usernameuser" value="{{$username}}" hidden>
+
+<section class="ftco-section bg-light">
+  <div class="container">
+    <div class="row d-flex" id="hotels">
     </div>
   </div>
-  <div class="card">
-    <img class="card-img-top" src="https://pbs.twimg.com/profile_images/461652698236850176/cucY7-cL.jpeg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This card has suppor natural lead-in to additional content.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
-  <div class="card">
-    <img class="card-img-top" src="https://pbs.twimg.com/profile_images/461652698236850176/cucY7-cL.jpeg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a wider cl height action.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
-  
-    <div class="card">
-    <img class="card-img-top" src="https://pbs.twimg.com/profile_images/461652698236850176/cucY7-cL.jpeg" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a al height action.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
- 
-</div>
+</section>
+
+@push('script')
+<script>
+    ownRatedHotel();
+
+	function ownRatedHotel(){
+        let username = document.getElementById('usernameuser').value;
+        console.log(username);
+
+        $.ajax({
+            url: "/api/own-rated-hotel",
+            type: "POST",
+            data : {
+                "username": username
+            },
+            dataType: "json",
+            success: function(res) {
+                let hotels = $('#hotels');
+                let hotel = res;
+                console.log(hotel);
+                hotels.empty();
+                for (let i=0; i<hotel.length; i++) {
+                    $.ajax({
+                        url: "/api/showother",
+                        type: "POST",
+                        data : {
+                            "gambar_hotel": hotel[i].gambar_hotel,
+                            "id_hotel": hotel[i].id_hotel
+                        },
+                        dataType: "json",
+                        success: function(res) {
+                            console.log(res);
+                            let rating = res.rating.toFixed(2);
+                            let html = `
+                            <div class="col-md-4 d-flex">
+                                <div class="blog-entry">
+                                <img class="block-20" width="100px" height="50px" src="${res.gambar}">
+                                <div class="text p-4 float-right d-block">
+                                    <div class="topper d-flex align-items-center">
+                                        <div class="one py-2 pl-3 pr-1 align-self-stretch">
+                                            <span style="color: white">${rating}</span>
+                                        </div>
+                                        <div class="two pl-0 pr-3 py-2 align-self-stretch">
+                                            <img src="">
+                                        </div>
+                                    </div>
+                                    <h3 class="heading mt-2"><a href="/user/hotel/${hotel[i].id_hotel}">${hotel[i].nama_hotel}</a></h3>
+                                    <p>${hotel[i].deskripsi}</p>
+                                </div>
+                                </div>
+                            </div>
+                            `
+                            hotels.append(html);
+                        }
+                    });
+                }
+            }
+        })
+	}
+</script>
+@endpush
+@endsection
+
+

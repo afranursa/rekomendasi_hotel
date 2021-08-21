@@ -88,6 +88,26 @@ class UsersController extends Controller
         return \view('user.detail_hotel', \compact('hotel'));
     }
 
+    public function riwayatRating(){
+        if(!Session::get('loginUser')){
+            return redirect('/user/login');
+        }
+
+        $username = Session::get('usernameuser');
+        return view('user.riwayat', compact('username'));
+    }
+
+    public function rating(){
+        if(!Session::get('loginUser')){
+            return redirect('/user/login');
+        }
+
+        $username = Session::get('usernameuser');
+        $nama = Session::get('nameUser');
+        $hotel = Hotel::get();
+        return view('user.rating', compact('username', 'hotel', 'nama'));
+    }
+
     public function index()
     {
 		if(!Session::get('loginAdmin')){

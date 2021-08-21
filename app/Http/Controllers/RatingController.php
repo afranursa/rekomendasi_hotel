@@ -14,36 +14,6 @@ use App\Models\Users;
 
 class RatingController extends Controller{
 //menampilkan semua data yg sudah dirating
-    public function ownRatedHotel(Request $request) {
-        $city = $request->city; //mengambil data kota, kenapa inisialisasinya city bukan kota?
-        $username = $request->username; //mengambil data username
-
-        $ratedHotel = Rating::where('username', $username)->get(); //produce: SELECT*FROM table
-
-        $unsortedData = collect($ratedHotel);
-        $ar = $unsortedData->sortBy('angka_rating'); //angka_rating mengambil dari database
-        $ar = $ar->values()->toArray(); //menampilkan semua data yg sudah dirating
-
-        $ratedHotel = $ar; //rata-rata hotel yang sudah dirating
-        $hotel = []; //inisialisasi hotel
-        $a = 0; //inisialisasi user pembanding utama
-
-        foreach($ratedHotel as $rat){ //menampilkan data hotel dengan memanggil id hotel
-            $hotel[$a] = Hotel::where('id_hotel', $rat['id_hotel'])->first();
-            $a++;
-        }
-
-        $hotelInCity = []; //rata-rata hotel terhadap user pembanding umum berdasarkan kota
-        $b = 0;
-        foreach($hotel as $key => $htl) {
-            if($htl->kota == $city) {
-                $hotelInCity[$b] = $htl;
-                $b++;
-            }
-        }
-
-        return response()->json($hotelInCity, 200);
-    }
 
     // public function recArroundHotel(Request $request) {
     //     $city = $request->city;
@@ -362,13 +332,18 @@ class RatingController extends Controller{
         $idHotel = $request->id_hotel;
         $gambarHotel = $request->gambar_hotel;
         $rating = Rating::where('id_hotel', $idHotel)->get();
-        $ratSum = 0;
+        $ratAverage = 0;
 
-        foreach($rating as $rat){
-            $ratSum = $ratSum + $rat->angka_rating;
+        if($rating->count() > 0){
+            $ratSum = 0;
+
+            foreach($rating as $rat){
+                $ratSum = $ratSum + $rat->angka_rating;
+            }
+
+            $ratAverage = $ratSum/$rating->count();
         }
 
-        $ratAverage = $ratSum/$rating->count();
         $gambarHotel = Storage::url($gambarHotel);
 
         return response()->json([
@@ -379,7 +354,7 @@ class RatingController extends Controller{
 
     public function newAlgorithm(Request $request) {
         $username = $request->username;
-        $city = $request->cuty;
+        $city = $request->city;
         $hotelRatingUser = Rating::where('username', $username)->get();
 
         //Rating hotel yang sudah dirating oleh user
@@ -637,7 +612,7 @@ class RatingController extends Controller{
         if(count($hotelInCity) == 0) {
             $hotelRatOwn = Rating::where('username', $username)->get();
             $hotelRatOwn = collect($hotelRatOwn);
-            $hotelRatOwn = $hotelRatOwn->sortBy('angka_rating');
+            $hotelRatOwn = $hotelRatOwn->sortByDesc('angka_rating');
             $hotelRatOwn = $hotelRatOwn->values()->toArray();
 
             $hotelList = [];
@@ -652,6 +627,48 @@ class RatingController extends Controller{
         return response()->json([
             "hotel_rec" => $hotelInCity,
             "username_similar" => $usernameSimilar,
+            "city" => $city
         ], 200);
+    }
+
+    public function ownRatedHotel(Request $request) {
+        $username = $request->username;
+
+        $ratedHotel = Rating::where('username', $username)->get();
+        $ratedHotel = collect($ratedHotel);
+        $ratedHotel = $ratedHotel->sortByDesc('angka_rating');
+        $ratedHotel = $ratedHotel->values()->toArray();
+
+        $hotels = [];
+        $a = 0;
+        foreach($ratedHotel as $rat){
+            $hotels[$a] = Hotel::where('id_hotel', $rat['id_hotel'])->first();
+            $a++;
+        }
+
+        return response()->json($hotels, 200);
+    }
+
+    public function hotelInCity(Request $request){
+        $city = $request->city;
+        $hotels = Hotel::where('kota', $city)->get();
+        return response()->json($hotels, 200);
+    }
+
+    public function searchHotel(Request $request){
+        $search = $request->search;
+        $hotels = [];
+        $hotelsInCity = Hotel::where('kota', 'like', '%' . $search . '%')->get();
+        $hotelsByName = Hotel::where('nama_hotel', 'like', '%' . $search . '%')->get();
+
+        if($hotelsInCity->count() > 0){
+            $hotels = $hotelsInCity;
+        }
+
+        if($hotelsByName->count() > 0){
+            $hotels = $hotelsByName;
+        }
+
+        return response()->json($hotels, 200);
     }
 }

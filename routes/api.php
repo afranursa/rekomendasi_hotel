@@ -18,7 +18,8 @@ use App\Http\Controllers\RatingController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/rec-arround-hotel', [RatingController::class, 'recArroundHotel']);
+Route::post('/hotel-in-city', [RatingController::class, 'hotelInCity']);
 Route::post('/own-rated-hotel', [RatingController::class, 'ownRatedHotel']);
 Route::post('/showother', [RatingController::class, 'showOther']);
 Route::post('/hotel-rec', [RatingController::class, 'newAlgorithm']);
+Route::post('/search-hotel', [RatingController::class, 'searchHotel']);

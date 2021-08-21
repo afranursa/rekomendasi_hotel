@@ -25,6 +25,9 @@
           <p>
             {!!$hotel->deskripsi!!}
           </p>
+          <p>
+            Alamat: {{$hotel->alamat}}
+          </p>
           {{-- <div class="tag-widget post-tag-container mb-5 mt-5">
             <div class="tagcloud">
               <a href="#" class="tag-cloud-link">Life</a>
@@ -43,9 +46,6 @@
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
             </div>
           </div> --}}
-
-
-
         </div> <!-- .col-md-8 -->
         <div class="col-lg-4 sidebar ftco-animate">
           <div class="sidebar-box">

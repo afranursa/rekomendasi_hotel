@@ -22,10 +22,10 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
 
-	          <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="/user/rating" class="nav-link">Rating</a></li>
-	          <li class="nav-item"><a href="/user/riwayat" class="nav-link">Riwayat Pengguna</a></li>
-	          <li class="nav-item"><a href="/user/logout" class="nav-link">Logout</a></li>
+	          <li class="nav-item @yield('active1')"><a href="/" class="nav-link">Home</a></li>
+	          <li class="nav-item @yield('active2')"><a href="/user/rating" class="nav-link">Rating</a></li>
+	          <li class="nav-item @yield('active3')"><a href="/user/riwayat" class="nav-link">Riwayat Pengguna</a></li>
+	          <li class="nav-item @yield('active4')"><a href="/user/logout" class="nav-link">Logout</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -42,7 +42,7 @@
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>

@@ -60,10 +60,6 @@ Route::get('/user/registrasi', [UsersController::class, 'regisIndex']);
 Route::post('/user/simpanregistrasi', [UsersController::class, 'regisSave']);
 
 
-Route::get('/user/rating', function () {
-    return view('user.rating');
-});
+Route::get('/user/rating', [UsersController::class, 'rating']);
 Route::get('/user/hotel/{idHotel}', [UsersController::class, 'detailHotel']);
-Route::get('/user/riwayat', function () {
-    return view('user.riwayat');
-});
+Route::get('/user/riwayat', [UsersController::class, 'riwayatRating']);
