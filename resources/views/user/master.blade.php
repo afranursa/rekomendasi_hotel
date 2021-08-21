@@ -3,7 +3,7 @@
   <head>
     <title>SR Hotel</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   	@include('user.style')
 
@@ -11,7 +11,7 @@
   </head>
 
   <body>
-    
+
     <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container-fluid px-md-5">
 	      <a class="navbar-brand" href="index.html">SR <span>Hotel</span></a>
@@ -21,10 +21,9 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-            
+
 	          <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
 	          <li class="nav-item"><a href="/user/rating" class="nav-link">Rating</a></li>
-	          <li class="nav-item"><a href="/user/detail_hotel" class="nav-link">Detail Hotel</a></li>
 	          <li class="nav-item"><a href="/user/riwayat" class="nav-link">Riwayat Pengguna</a></li>
 	          <li class="nav-item"><a href="/user/logout" class="nav-link">Logout</a></li>
 	        </ul>
@@ -32,7 +31,7 @@
 	    </div>
 	  </nav>
     <!-- END nav -->
-    
+
     @yield('content')
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
@@ -49,11 +48,11 @@
         </div>
       </div>
     </footer>
-    
+
   @include('user.script')
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-   
+
   </body>
 </html>

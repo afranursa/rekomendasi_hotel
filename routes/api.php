@@ -21,4 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/rec-arround-hotel', [RatingController::class, 'recArroundHotel']);
 Route::post('/own-rated-hotel', [RatingController::class, 'ownRatedHotel']);
 Route::post('/showother', [RatingController::class, 'showOther']);
-
+Route::post('/hotel-rec', [RatingController::class, 'newAlgorithm']);

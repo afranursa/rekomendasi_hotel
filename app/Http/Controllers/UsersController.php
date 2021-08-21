@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Users;
+use App\Models\Hotel;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use DB;
@@ -78,6 +79,15 @@ class UsersController extends Controller
         return view('user.home', compact('nama', 'username'));
     }
 
+    public function detailHotel($idHotel){
+        if(!Session::get('loginUser')){
+            return redirect('/user/login');
+        }
+
+        $hotel = Hotel::where('id_hotel', $idHotel)->first();
+        return \view('user.detail_hotel', \compact('hotel'));
+    }
+
     public function index()
     {
 		if(!Session::get('loginAdmin')){
@@ -87,7 +97,6 @@ class UsersController extends Controller
 
     	// mengirim data pegawai ke view index
     	return view('admin/data_user',['users' => $user]);
-
     }
 
     public function search(Request $request)
@@ -97,14 +106,14 @@ class UsersController extends Controller
         }
 		// menangkap data pencarian
 		$cari = $request->cari;
- 
+
     		// mengambil data dari table pegawai sesuai pencarian data
 		$user = DB::table('users')
 		->where('nama_user','like',"%".$cari."%")
 		->paginate();
- 
+
     		// mengirim data pegawai ke view index
 		return view('admin/data_user',['users' => $user]);
- 
+
 	}
 }

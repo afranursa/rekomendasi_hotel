@@ -63,9 +63,7 @@ Route::post('/user/simpanregistrasi', [UsersController::class, 'regisSave']);
 Route::get('/user/rating', function () {
     return view('user.rating');
 });
-Route::get('/user/detail_hotel', function () {
-    return view('user.detail_hotel');
-});
+Route::get('/user/hotel/{idHotel}', [UsersController::class, 'detailHotel']);
 Route::get('/user/riwayat', function () {
     return view('user.riwayat');
 });

@@ -1,13 +1,13 @@
 @extends('user.master')
 @section('content')
 
-<section class="hero-wrap hero-wrap-2" style="background-image: url('/usertemplate/images/LUXTON.jpg');" data-stellar-background-ratio="0.5">
+<section class="hero-wrap hero-wrap-2" style="background-image: url({{Storage::url($hotel->gambar_hotel)}});" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text align-items-end justify-content-center">
         <div class="col-md-9 ftco-animate pb-5 text-center">
-          <h1 class="mb-3 bread">Nama</h1>
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a href="blog.html">Detail Hotel <i class="ion-ios-arrow-forward"></i></a></span> <span>(Nama Hotel) <i class="ion-ios-arrow-forward"></i></span></p>
+          <h1 class="mb-3 bread">{{$hotel->nama_hotel}}</h1>
+          <p class="breadcrumbs"><span class="mr-2"><a href="/user/home">Home <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a href="#">Detail Hotel <i class="ion-ios-arrow-forward"></i></a></span> <span>{{$hotel->nama_hotel}}<i class="ion-ios-arrow-forward"></i></span></p>
         </div>
       </div>
     </div>
@@ -18,21 +18,22 @@
       <div class="row">
         <div class="col-lg-8 ftco-animate">
             <p>
-            <img src="/usertemplate/images/LUXTON.jpg" alt="" class="img-fluid">
+            <img src="{{Storage::url($hotel->gambar_hotel)}}" alt="" class="img-fluid">
           </p>
-          <h2 class="mb-3">(Nama Hotel)</h2>
+          <h2 class="mb-3">{{$hotel->nama_hotel}}</h2>
+          <span class="badge badge-pill badge-primary">{{$hotel->jenis_hotel}}</span>
           <p>
-            
+            {!!$hotel->deskripsi!!}
           </p>
-          <div class="tag-widget post-tag-container mb-5 mt-5">
+          {{-- <div class="tag-widget post-tag-container mb-5 mt-5">
             <div class="tagcloud">
               <a href="#" class="tag-cloud-link">Life</a>
               <a href="#" class="tag-cloud-link">Sport</a>
               <a href="#" class="tag-cloud-link">Tech</a>
               <a href="#" class="tag-cloud-link">Travel</a>
             </div>
-          </div>
-          
+          </div> --}}
+
           {{-- <div class="about-author d-flex p-4 bg-light">
             <div class="bio mr-5">
               <img src="/usertemplate/images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">
@@ -71,4 +72,3 @@
       </div>
     </div>
   </section> <!-- .section -->
-  
