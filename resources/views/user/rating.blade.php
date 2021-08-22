@@ -21,7 +21,27 @@
                     <div class="card-body">
                         <h2 class="mb-4">Rating Hotel</h2>
                         <span class="subheading">Silahkan merating hotel!</span>
-                        <form action="#" class="consultation">
+                        @if ($errors->any())
+                            <div class="alert alert-danger" role="alert">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{$error}}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        @if(Session::has('alert-danger'))
+                            <div class="alert alert-danger">
+                                <div>{{Session::get('alert-danger')}}</div>
+                            </div>
+                        @endif
+                        @if(Session::has('alert-success'))
+                            <div class="alert alert-success">
+                                <div>{{Session::get('alert-success')}}</div>
+                            </div>
+                        @endif
+                        <form action="/user/rating/add" method="POST" class="consultation">
+                            {{ csrf_field() }}
                             <div class="form-group">
                                 <input type="text" class="form-control" name="username" placeholder="Username" value="{{$username}}" readonly>
                             </div>
@@ -30,8 +50,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Pilih Hotel</label>
-                                <select class="form-control js-example-basic-single" name="hotel" id="exampleFormControlSelect1">
-                                    <option>--- Pilih Hotel ---</option>
+                                <select class="form-control js-example-basic-single" name="hotel" id="exampleFormControlSelect1" required>
+                                    <option value=" ">--- Pilih Hotel ---</option>
                                     @foreach ($hotel as $htl)
                                         <option value="{{$htl->id_hotel}}">{{$htl->nama_hotel}}</option>
                                     @endforeach
@@ -39,19 +59,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="customRange1" class="form-label">Rating Fasilitas Hotel</label>
-                                <input type="range" class="form-control form-range" min="0" max="5" id="customRange1" name="fasilitas">
+                                <input type="range" class="form-control form-range" min="1" max="5" id="customRange1" name="fasilitas">
                             </div>
                             <div class="form-group">
                                 <label for="customRange2" class="form-label">Rating Kenyamanan Hotel</label>
-                                <input type="range" class="form-control form-range" min="0" max="5" id="customRange2" name="kenyamanan">
+                                <input type="range" class="form-control form-range" min="1" max="5" id="customRange2" name="kenyamanan">
                             </div>
                             <div class="form-group">
                                 <label for="customRange3" class="form-label">Rating Harga Hotel</label>
-                                <input type="range" class="form-control form-range" min="0" max="5" id="customRange3" name="harga">
+                                <input type="range" class="form-control form-range" min="1" max="5" id="customRange3" name="harga">
                             </div>
                             <div class="form-group">
                                 <label for="customRange4" class="form-label">Rating Strategis Letak Hotel</label>
-                                <input type="range" class="form-control form-range" min="0" max="5" id="customRange4" name="letak">
+                                <input type="range" class="form-control form-range" min="1" max="5" id="customRange4" name="letak">
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Selesai" class="btn btn-primary py-3 px-4">

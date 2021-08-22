@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Users;
 use App\Models\Hotel;
+use App\Models\Rating;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use DB;
@@ -106,6 +107,42 @@ class UsersController extends Controller
         $nama = Session::get('nameUser');
         $hotel = Hotel::get();
         return view('user.rating', compact('username', 'hotel', 'nama'));
+    }
+
+    public function addRating(Request $request) {
+        if(!Session::get('loginUser')){
+            return redirect('/user/login');
+        }
+
+        $this->validate($request, [
+            'hotel' => '|required'
+        ]);
+
+        $username = $request->username;
+        $idHotel = $request->hotel;
+        $letak = intval($request->letak);
+        $harga = intval($request->harga);
+        $kenyamanan = intval($request->kenyamanan);
+        $fasilitas = intval($request->fasilitas);
+
+        $angkaRating = ($letak + $harga + $kenyamanan + $fasilitas) / 4;
+
+        $rated = Rating::where('username', $username)->where('id_hotel', $idHotel)->get();
+        if($rated->count() > 0){
+            return \redirect()->back()->with('alert-danger', 'Anda sudah pernah merating hotel!');
+        }
+
+        $rating = new Rating();
+        $rating->id_rating = uniqid();
+        $rating->username = $username;
+        $rating->id_hotel = $idHotel;
+        $rating->letak = $letak;
+        $rating->harga = $harga;
+        $rating->fasilitas = $fasilitas;
+        $rating->kenyamanan = $kenyamanan;
+        $rating->angka_rating = $angkaRating;
+        $rating->save();
+        return \redirect()->back()->with('alert-success', 'Berhasil menambah rating!');
     }
 
     public function index()

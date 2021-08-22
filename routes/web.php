@@ -63,3 +63,4 @@ Route::post('/user/simpanregistrasi', [UsersController::class, 'regisSave']);
 Route::get('/user/rating', [UsersController::class, 'rating']);
 Route::get('/user/hotel/{idHotel}', [UsersController::class, 'detailHotel']);
 Route::get('/user/riwayat', [UsersController::class, 'riwayatRating']);
+Route::post('/user/rating/add', [UsersController::class, 'addRating']);

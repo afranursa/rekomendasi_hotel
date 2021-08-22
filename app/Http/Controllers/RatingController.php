@@ -570,46 +570,64 @@ class RatingController extends Controller{
             }
         }
 
-        $maxIndexResult = array_keys($result_diff, max($result_diff));
-
-        //Cari user similar
-        $usernameSimilar = $usernamesByHotel[0][$maxIndexResult[0]];
-
-        //Rating dari user similar
-        $ratingSimilar = Rating::where('username', $usernameSimilar)->get();
-
-        //Sorting berdasarkan rating tertinggi
-        $ratingSimilar = collect($ratingSimilar);
-        $ratingSimilar = $ratingSimilar->sortByDesc('angka_rating');
-        $ratingSimilar = $ratingSimilar->values()->toArray();
-
-        $idHotelSimilar = [];
-        foreach($ratingSimilar as $key15 => $rs){
-            $idHotelSimilar[$key15] = $rs['id_hotel'];
-        }
-
-        $idHotelUser = [];
-        foreach($hotelRatingUser as $key16 => $hru){
-            $idHotelUser[$key16] = $hru->id_hotel;
-        }
-
-        $idSuggestHotel = array_values(array_diff($idHotelSimilar, $idHotelUser));
-
-        $hotelSimilar = [];
-        foreach($idSuggestHotel as $key17 => $ish) {
-            $hotelSimilar[$key17] = Hotel::where('id_hotel', $ish)->first();
-        }
-
         $hotelInCity = [];
-        $c = 0;
-        foreach($hotelSimilar as $hotel) {
-            if($hotel->kota == $city) {
-                $hotelInCity[$c] = $hotel;
-                $c++;
-            }
-        }
+        $usernameSimilar = "";
 
-        if(count($hotelInCity) == 0) {
+        if(count($result_diff) > 0){
+            $maxIndexResult = array_keys($result_diff, max($result_diff));
+
+            //Cari user similar
+            $usernameSimilar = $usernamesByHotel[0][$maxIndexResult[0]];
+
+            //Rating dari user similar
+            $ratingSimilar = Rating::where('username', $usernameSimilar)->get();
+
+            //Sorting berdasarkan rating tertinggi
+            $ratingSimilar = collect($ratingSimilar);
+            $ratingSimilar = $ratingSimilar->sortByDesc('angka_rating');
+            $ratingSimilar = $ratingSimilar->values()->toArray();
+
+            $idHotelSimilar = [];
+            foreach($ratingSimilar as $key15 => $rs){
+                $idHotelSimilar[$key15] = $rs['id_hotel'];
+            }
+
+            $idHotelUser = [];
+            foreach($hotelRatingUser as $key16 => $hru){
+                $idHotelUser[$key16] = $hru->id_hotel;
+            }
+
+            $idSuggestHotel = array_values(array_diff($idHotelSimilar, $idHotelUser));
+
+            $hotelSimilar = [];
+            foreach($idSuggestHotel as $key17 => $ish) {
+                $hotelSimilar[$key17] = Hotel::where('id_hotel', $ish)->first();
+            }
+
+            $hotelInCity = [];
+            $c = 0;
+            foreach($hotelSimilar as $hotel) {
+                if($hotel->kota == $city) {
+                    $hotelInCity[$c] = $hotel;
+                    $c++;
+                }
+            }
+
+            if(count($hotelInCity) == 0) {
+                $hotelRatOwn = Rating::where('username', $username)->get();
+                $hotelRatOwn = collect($hotelRatOwn);
+                $hotelRatOwn = $hotelRatOwn->sortByDesc('angka_rating');
+                $hotelRatOwn = $hotelRatOwn->values()->toArray();
+
+                $hotelList = [];
+
+                foreach($hotelRatOwn as $key => $htrt) {
+                    $hotelList[$key] = Hotel::where('id_hotel', $htrt['id_hotel'])->first();
+                }
+
+                $hotelInCity = $hotelList;
+            }
+        }else {
             $hotelRatOwn = Rating::where('username', $username)->get();
             $hotelRatOwn = collect($hotelRatOwn);
             $hotelRatOwn = $hotelRatOwn->sortByDesc('angka_rating');
