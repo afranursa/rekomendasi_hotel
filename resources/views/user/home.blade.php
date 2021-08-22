@@ -98,7 +98,7 @@
 							success: function(res) {
 								let hotels = $('#hotels');
 								let hotel = res.hotel_rec;
-								console.log(hotel);
+								console.log(res);
 								hotels.empty();
 								for (let i=0; i<hotel.length; i++) {
 									$.ajax({
