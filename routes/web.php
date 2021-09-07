@@ -18,9 +18,7 @@ use App\Http\Controllers\RatingController;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/user/login');
-});
+Route::get('/', [UsersController::class, 'landing']);
 
 Route::get('/admin/login', [AdminController::class, 'loginIndex']);
 

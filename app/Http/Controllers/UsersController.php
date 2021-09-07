@@ -70,9 +70,17 @@ class UsersController extends Controller
 		return redirect('/user/login')->with('alert-success', 'Logout berhasil!');
     }
 
+    public function landing(){
+        if(Session::get('loginUser')){
+            return redirect('/user/home');
+        }
+
+        return view('user.landing_page');
+    }
+
 	public function home(){
         if(!Session::get('loginUser')){
-            return redirect('/user/login');
+            return redirect('/user/login')->with('alert-danger', 'Anda harus login terlebih dahulu!');
         }
 
 		$nama = Session::get('nameUser');
@@ -82,7 +90,7 @@ class UsersController extends Controller
 
     public function detailHotel($idHotel){
         if(!Session::get('loginUser')){
-            return redirect('/user/login');
+            return redirect('/user/login')->with('alert-danger', 'Anda harus login terlebih dahulu!');
         }
 
         $hotel = Hotel::where('id_hotel', $idHotel)->first();
@@ -91,7 +99,7 @@ class UsersController extends Controller
 
     public function riwayatRating(){
         if(!Session::get('loginUser')){
-            return redirect('/user/login');
+            return redirect('/user/login')->with('alert-danger', 'Anda harus login terlebih dahulu!');
         }
 
         $username = Session::get('usernameuser');
@@ -100,7 +108,7 @@ class UsersController extends Controller
 
     public function rating(){
         if(!Session::get('loginUser')){
-            return redirect('/user/login');
+            return redirect('/user/login')->with('alert-danger', 'Anda harus login terlebih dahulu!');
         }
 
         $username = Session::get('usernameuser');
